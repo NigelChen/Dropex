@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  maskedName: MyString
+  toDestroy: 2016-01-23 04:45:01
+
+two:
+  name: MyString
+  maskedName: MyString
+  toDestroy: 2016-01-23 04:45:01

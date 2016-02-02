@@ -1,0 +1,172 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><b>Dropex</b></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Upload</a></li>
+            <li><a href="/download">Download</a></li>
+            <li><a href="/settings">Settings</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/terms">Terms of Use</a></li>
+            <li><a href="../navbar-static-top/">About</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+
+
+
+<center>
+    <br><br><br><br><br><br><h1>upload</h1>
+    <style>
+        #time {
+            width:50%;
+            text-align:center;
+            font-size: 90%;
+            
+        }
+        #upload_units {
+            width:50%;
+        }
+        #form {
+            width:20%;
+            height:40%;
+            
+        }
+        #code {
+            height:40px;
+            width:50%;
+            font-size: 90%;
+            text-align: center;
+        }
+        #terms {
+            font-weight: bold;
+            font-size: 70%;
+        }
+        #limit {
+            height:30px;
+            width:50%;
+            font-size: 90%;
+            text-align: center;
+        }
+        #notice {
+            color: red;
+            font-weight: bold;
+        }
+        h1 {
+            font-size: 40px;
+        }
+        .help-block{
+            font-size:10px;
+            visibility: hidden;
+        }
+        #submit {
+            height: 50px;
+            width: 50%;
+        }
+    </style>
+    <p id="notice">
+    <% if flash[:success] %>
+        <div class="notice"><font color='green'><b ><%= flash[:success] %></b></font></div>
+     <%else%>
+         &nbsp;
+     <% end %>
+     </p>
+    
+    <%=form_for :upload, url: pages_uploadFile_path do |f|%>
+        <%=f.file_field :file, style: "display: none;"%>
+        <b><a href="#SUPFAM" onclick="document.getElementById('upload_file').click();return false; " />upload a file</a></b><br>
+        
+        <p id ="fileSelected">no file selected (max: 50mb)</p>
+        <br>
+        <div id="form">
+            
+            <%=f.text_field :time, id:"time", placeholder: "Timer", onfocus: "appear('minHelp');", class: "form-control"%>
+            
+            <%= f.select :units, [['Minutes','min'],['Hours','hour']] ,id:"units"%><br>
+            <span id="minHelp" class="help-block"> default: <a href="/settings"target="_blank"><%if cookies[:time]%><%=cookies[:time]%><%else%>30 <%end%>
+            <%if cookies[:units] && cookies[:units] == "min"%>minute(s)
+            <%elsif cookies[:units] && cookies[:units] == "hour"%>hour(s)<%else%>
+            minutes<%end%>
+            
+            </span></a>
+            
+            <%=f.text_field :interval , placeholder:"download limit", id: "limit",class:"form-control",onfocus: "appear('intHelp');"%>
+            <span id="intHelp" class="help-block">default: <a href="/settings"target="_blank"><%if cookies[:interval]%><%=cookies[:interval]%><%else%>.1 <%end%> download(s)</a></span>
+            
+            <%=f.text_field :code, placeholder: "custom file code", id:"code", class: "form-control" ,onfocus: "appear('codeHelp');"%>
+            <span id="codeHelp" class="help-block">optional</span>
+            <%=f.submit "upload file", class:"btn btn-primary",id:'submit',:onclick => "return checkFields();"%>
+            
+        </div>
+        <br><p id="terms">you are agreeing to the terms of service by pressing the button above: <a href="/terms">click here to view.</a></p>
+    <%end%>
+    
+    <script>
+
+
+    
+    
+        document.getElementById('upload_file').onchange = function () {
+          document.getElementById('fileSelected').innerHTML = document.getElementById('upload_file').value.split(/(\\|\/)/g).pop();
+        };
+
+        function appear(id) {
+            document.getElementById(id).style.visibility = "visible";
+        }
+        
+        function checkFields() {
+            if((document.getElementById("upload_units").value == "min" &&parseFloat((document.getElementById("time")).value) >=2881) || (document.getElementById("upload_units").value == "hour" && parseFloat((document.getElementById("time")).value) >=49)) {
+                document.getElementById("notice").innerHTML = "The file must be set to self destruct by no more than 2 days.";
+                
+            }
+            
+            else if(document.getElementById("code").value.length >= 100){
+                 document.getElementById("notice").innerHTML = "The custom code cannot go over 99 characters long";
+            } 
+            else if(document.getElementById("limit").value.length >= 99 || parseInt(document.getElementById("limit").value) <= 0) {
+                
+                document.getElementById("notice").innerHTML = "The download limit must be 1 <= download limit > 99 characters long";
+            } else if (isNaN(document.getElementById("time").value)) {
+                document.getElementById("notice").innerHTML = "The timer time must be a valid number bigger than 0.";
+            } else if (isNaN(document.getElementById("limit").value)) {
+                document.getElementById("notice").innerHTML = "The download limit must be a valid number bigger than 0 or left blank.";
+            }
+            
+            
+            else if(document.getElementById("upload_file").value.length==0) {
+                document.getElementById("notice").innerHTML = "A file must be uploaded.";
+            } else if (document.getElementById('upload_file').files[0].size >=52428801) {
+                document.getElementById("notice").innerHTML = "The file is to large. It must be 50MB or under.";
+            } else{
+               document.getElementById("notice").innerHTML = "<font color='green'><b>Uploading your file..</b></font>";
+               return true;
+            }
+            return false;
+        }
+        function fileSelect() {
+            console.log(document.getElementById('upload_file').value.split(/(\\|\/)/g).pop());
+            document.getElementById('fileSelected').innerHTML = document.getElementById('upload_file').value.split(/(\\|\/)/g).pop();
+        }
+        
+    </script>
+    <br><br><br><br><br><br><br><br><br></br.>
+    <a href="/download">To download a file, click here.</a>
+    
+    
+    
+    
+
+    
+</center>
