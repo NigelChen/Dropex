@@ -2,6 +2,7 @@
 
 #init dependencies 
 require 'zip'
+require 'rubygems'
 #end dependencies
 
 class PagesController < ApplicationController
@@ -91,15 +92,15 @@ class PagesController < ApplicationController
       while Defile.exists?(maskedFileName)
         maskedFileName = SecureRandom.hex
       end
-      
+      maskedFileName = maskedFileName+".zip"
       #creates file object. save into databse
       Defile.create(name: fileObject.original_filename, maskedName: maskedFileName, toDestroy: hours, filecode: code,maxlim: maxlim,downloads:0)
       
       #creates zipped directory
-      Zip::File.open(Rails.root.join('public','files', maskedFileName+".zip"), Zip::File::CREATE) do |zipfile|
-        zipfile.add(fileObject.original_filename, folder + '/' + filename)
+      Zip::ZipFile.open(Rails.root.join('public','files', maskedFileName), Zip::ZipFile::CREATE) do |zipfile|
+          zipfile.get_output_stream("first.txt") { |f| f.puts "Hello from ZipFile" }
+          zipfile.mkdir("a_dir")
       end
-
       #saves into the disk
      # File.open(Rails.root.join('public','files', maskedFileName), 'wb') do |f|
         #f.write(fileObject.read)

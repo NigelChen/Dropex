@@ -103,6 +103,7 @@ GEM
     rdoc (4.2.0)
     recaptcha (1.1.0)
       json
+    rubyzip (1.1.7)
     sass (3.4.19)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
@@ -147,6 +148,7 @@ DEPENDENCIES
   jquery-rails
   rails (= 4.2.4)
   recaptcha
+  rubyzip (>= 1.0.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring
