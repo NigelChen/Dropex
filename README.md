@@ -17,5 +17,7 @@ What is Dropex?
 5) Click upload. Receive file code to download file.
 
 ----
+![dropex](http://i.imgur.com/kjga7Zj.png)
+
 ## changelog
 * dropex release on http://dropex.co (2/2/16)
