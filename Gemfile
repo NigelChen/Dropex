@@ -31,8 +31,14 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-gem "recaptcha", require: "recaptcha/rails"
 
+#init 3rd party
+
+
+gem "recaptcha", require: "recaptcha/rails"
+gem 'rubyzip', '>= 1.0.0' 
+
+#end 3rd party
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
