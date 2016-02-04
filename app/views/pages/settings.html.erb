@@ -1,0 +1,101 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><b>Dropex</b></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Upload</a></li>
+            <li ><a href="/download">Download</a></li>
+            <li class="active"><a href="/settings">Settings</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/terms">Terms of Use</a></li>
+            <li><a href="../navbar-static-top/">About</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+<style>
+    h1 {
+        text-align: center;
+    }
+    p {
+        text-align: center;
+    }
+    h3 {
+        text-align: center;
+        font-weight: bold;
+    }
+    #form {
+        width: 20%;
+        text-align: center;
+        float: center;
+    }
+    form {
+        width:50%;
+        font-size: 100%
+        
+    }
+    select {
+        width:100%;
+        text-align: center;
+    }
+    
+</style>
+<center>
+<br><br><br><br><h1><h1>local settings</h1>
+<%if flash[:notice]%>
+    <%=flash[:notice]%>
+<%else%>
+    <p id="notice">These settings will be saved as long as cookies are enabled on this computer.</p>
+<%end%>
+<br>
+<%=form_for :config, url: pages_configure_path do |f|%>
+    <h3>Timer</h3>
+    <p>Set the default time 'till your file self destructs.</p>
+    <div id="form">
+        <%=f.text_field :time, id:"time", placeholder: "set default time", class: "form-control"%>
+        <%= f.select :units, [['Minutes','min'],['Hours','hour']] ,id:"units"%><br>
+        
+        <br>
+        <h3>Download limit</h3>
+        <p>Set the default download limit.</p>
+        <%=f.text_field :interval , placeholder:"download limit", id: "limit",class:"form-control"%><br><br>
+        <%=f.submit "Save settings", :onclick => "return checkFields();"%>
+    </div>
+<%end%>
+<%= form_for :reset, url: pages_resetSettings_path do |f|%>
+    <%=f.submit "Reset settings to default"%>
+<%end%>
+<script>
+    function checkFields() { 
+        if((document.getElementById("config_units").value == "min" &&parseFloat((document.getElementById("time")).value) >=2881) || (document.getElementById("config_units").value == "hour" && parseFloat((document.getElementById("time")).value) >=49)) {
+            document.getElementById("notice").innerHTML = "The file must be set to self destruct by no more than 2 days.";
+                
+        }
+        else if(document.getElementById("limit").value.length >= 99 || parseInt(document.getElementById("limit").value) <= 0) {
+            document.getElementById("notice").innerHTML = "The download limit must be 1 <= download limit > 99 characters long";
+        } else if (isNaN(document.getElementById("time").value)) {
+            document.getElementById("notice").innerHTML = "The timer time must be a valid number bigger than 0.";
+        } else if (isNaN(document.getElementById("limit").value)) {
+            document.getElementById("notice").innerHTML = "The download limit must be a valid number bigger than 0 or left blank.";
+        } else if(document.getElementById("time").value.length <= 0 ||document.getElementById("limit").value.length <= 0 ) {
+            document.getElementById("notice").innerHTML = "The fields cannot be left empty.";
+        }
+        else {
+            return true;
+        }
+            return false;
+        }
+        
+</script>
+</center>

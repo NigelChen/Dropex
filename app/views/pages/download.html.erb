@@ -1,0 +1,77 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><b>Dropex</b></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Upload</a></li>
+            <li class="active"><a href="/download">Download</a></li>
+            <li><a href="/settings">Settings</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/terms">Terms of Use</a></li>
+            <li><a href="../navbar-static-top/">About</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+
+
+<center>
+    <br><br><br><br><br><br><h1>download</h1>
+    <style>
+        h1 {
+            font-size: 40px;
+        }
+        .help-block{
+            font-size:10px;
+            visibility: hidden;
+        }
+        .input-group {
+            width: 10%;
+        }
+        #downloadfield {
+            height: 20%;
+            font-size: 50px;
+            text-align: center;
+        }
+        #submit {
+            width: 100%;
+        }
+        
+    </style>
+    <p id="notice">
+    <% if flash[:notice] %>
+        <div class="notice"><b><%= flash[:notice] %></b></div>
+     <%else%>
+         enter a provided file code to download a file
+     <% end %>
+     </p>
+    
+    <%=form_for :download, url: pages_downloadFile_path do |f|%>
+        <div class="input-group">
+       <%=f.text_field :code,id: "downloadfield",class:'form-control',placeholder: 'code',maxlength: "6"%>
+        <%=f.submit "Download",id:"submit",class:"btn btn-default"%>
+         </div>
+       
+    <%end%>
+    
+   
+    <br><br><br><br><br>
+    <a href="/">To upload a file, click here.</a>
+    
+    
+    
+    
+
+    
+</center>
