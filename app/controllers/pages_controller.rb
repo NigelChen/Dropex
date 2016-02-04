@@ -97,14 +97,21 @@ class PagesController < ApplicationController
       Defile.create(name: fileObject.original_filename, maskedName: maskedFileName, toDestroy: hours, filecode: code,maxlim: maxlim,downloads:0)
       
       #creates zipped directory
+<<<<<<< HEAD
       Zip::ZipFile.open(Rails.root.join('public','files', maskedFileName), Zip::ZipFile::CREATE) do |zipfile|
           zipfile.get_output_stream("first.txt") { |f| f.puts "Hello from ZipFile" }
           zipfile.mkdir("a_dir")
       end
+=======
+      #Zip::File.open(Rails.root.join('public','files', maskedFileName+".zip"), Zip::File::CREATE) do |zipfile|
+       # zipfile.add(fileObject.original_filename, folder + '/' + filename)
+    #end
+
+>>>>>>> 3a5923cd0fccc5ffc52ab950d6845bfaf33394a8
       #saves into the disk
-     # File.open(Rails.root.join('public','files', maskedFileName), 'wb') do |f|
-        #f.write(fileObject.read)
-     # end
+     File.open(Rails.root.join('public','files', maskedFileName), 'wb') do |f|
+        f.write(fileObject.read)
+     end
 
       flash[:success] = "Your file code is #{code} " 
       #yay, finished! redirect    
