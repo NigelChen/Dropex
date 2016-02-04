@@ -79,8 +79,10 @@
     <p id="notice">
     <% if flash[:success] %>
         <div class="notice"><font color='green'><b ><%= flash[:success] %></b></font></div>
+     <%elsif flash[:notice]%>
+        <div class="notice"><font color='red'><b ><%= flash[:notice] %></b></font></div>
      <%else%>
-         &nbsp;
+        &nbsp;
      <% end %>
      </p>
     
@@ -106,7 +108,8 @@
             <span id="intHelp" class="help-block">default: <a href="/settings"target="_blank"><%if cookies[:interval]%><%=cookies[:interval]%><%else%>.1 <%end%> download(s)</a></span>
             
             <%=f.text_field :code, placeholder: "custom file code", id:"code", class: "form-control" ,onfocus: "appear('codeHelp');"%>
-            <span id="codeHelp" class="help-block">optional</span>
+            
+            <%=recaptcha_tags%>
             <%=f.submit "upload file", class:"btn btn-primary",id:'submit',:onclick => "return checkFields();"%>
             
         </div>
@@ -161,8 +164,8 @@
         }
         
     </script>
-    <br><br><br><br><br><br><br><br><br></br.>
-    <a href="/download">To download a file, click here.</a>
+    <br><br><br><br><br><br>
+    <b><a href="/download">To download a file, click here.</a></b>
     
     
     
