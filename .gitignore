@@ -54,4 +54,7 @@ build/
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
 >>>>>>> b0f3fff97bb4a377deac4aed03d268a20efedbdf
+<<<<<<< HEAD
 config
+=======
+>>>>>>> 79ed9b7e04491e05f7ecca553c6679421acc8823

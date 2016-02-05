@@ -1,6 +1,16 @@
+<<<<<<< HEAD
 class PagesController < ApplicationController
   require 'zip'
 
+=======
+
+
+#init dependencies 
+require 'zip'
+#end dependencies
+
+class PagesController < ApplicationController
+>>>>>>> 79ed9b7e04491e05f7ecca553c6679421acc8823
   def index
     sweepFile
     
@@ -90,6 +100,7 @@ class PagesController < ApplicationController
       
       #creates file object. save into databse
       Defile.create(name: fileObject.original_filename, maskedName: maskedFileName, toDestroy: hours, filecode: code,maxlim: maxlim,downloads:0)
+<<<<<<< HEAD
       binaryCode = fileObject.read
       #saves into the disk
       File.open(Rails.root.join('public','files', maskedFileName), 'wb') do |f|
@@ -102,6 +113,19 @@ class PagesController < ApplicationController
 	
       zipfile.get_output_stream(fileObject.original_filename)  { |os| os.puts(binaryCode)}
       end
+=======
+      
+      #creates zipped directory
+      #Zip::File.open(Rails.root.join('public','files', maskedFileName+".zip"), Zip::File::CREATE) do |zipfile|
+       # zipfile.add(fileObject.original_filename, folder + '/' + filename)
+    #end
+
+      #saves into the disk
+     File.open(Rails.root.join('public','files', maskedFileName), 'wb') do |f|
+        f.write(fileObject.read)
+     end
+
+>>>>>>> 79ed9b7e04491e05f7ecca553c6679421acc8823
       flash[:success] = "Your file code is #{code} " 
       #yay, finished! redirect    
       redirect_to "/"
