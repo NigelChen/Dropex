@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 class PagesController < ApplicationController
   require 'zip'
 
-=======
 
 
 #init dependencies 
@@ -10,7 +8,6 @@ require 'zip'
 #end dependencies
 
 class PagesController < ApplicationController
->>>>>>> 79ed9b7e04491e05f7ecca553c6679421acc8823
   def index
     sweepFile
     
@@ -100,32 +97,17 @@ class PagesController < ApplicationController
       
       #creates file object. save into databse
       Defile.create(name: fileObject.original_filename, maskedName: maskedFileName, toDestroy: hours, filecode: code,maxlim: maxlim,downloads:0)
-<<<<<<< HEAD
       binaryCode = fileObject.read
       #saves into the disk
-      File.open(Rails.root.join('public','files', maskedFileName), 'wb') do |f|
-        f.write(binaryCode)
-      end
-      #saves the zip
-
-	puts fileObject.read
-      Zip::File.open(Rails.root.join('public','files',maskedFileName + 'a.zip'), Zip::File::CREATE) do |zipfile|
-	
-      zipfile.get_output_stream(fileObject.original_filename)  { |os| os.puts(binaryCode)}
-      end
-=======
+      #File.open(Rails.root.join('public','files', maskedFileName), 'wb') do |f|
+      #  f.write(binaryCode)
+      #end
       
-      #creates zipped directory
-      #Zip::File.open(Rails.root.join('public','files', maskedFileName+".zip"), Zip::File::CREATE) do |zipfile|
-       # zipfile.add(fileObject.original_filename, folder + '/' + filename)
-    #end
-
-      #saves into the disk
-     File.open(Rails.root.join('public','files', maskedFileName), 'wb') do |f|
-        f.write(fileObject.read)
-     end
-
->>>>>>> 79ed9b7e04491e05f7ecca553c6679421acc8823
+      #saves the zip
+      Zip::File.open(Rails.root.join('public','files',maskedFileName + 'a.zip'), Zip::File::CREATE) do |zipfile|
+        zipfile.get_output_stream(fileObject.original_filename)  { |os| os.puts(binaryCode)}
+      end
+      
       flash[:success] = "Your file code is #{code} " 
       #yay, finished! redirect    
       redirect_to "/"
@@ -141,7 +123,7 @@ class PagesController < ApplicationController
       redirect_to "/download"
     else
       Defile.update(Defile.find_by_filecode(fileName).id, downloads: Defile.find_by_filecode(fileName).downloads + 1)
-      send_file(Rails.root.join('public','files',Defile.find_by_filecode(fileName).maskedName), :filename => Defile.find_by_filecode(fileName).name)
+      send_file(Rails.root.join('public','files',Defile.find_by_filecode(fileName).maskedName))
     end
   end
   
@@ -165,4 +147,5 @@ class PagesController < ApplicationController
   
   
   
+end
 end
