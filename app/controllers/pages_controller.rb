@@ -1,7 +1,3 @@
-class PagesController < ApplicationController
-  require 'zip'
-
-
 
 #init dependencies 
 require 'zip'
@@ -39,7 +35,6 @@ class PagesController < ApplicationController
       flash[:notice] = "You need to complete the recaptcha."
       redirect_to "/"
     else
-
       fileObject = params[:upload][:file] #the file
       timeToDestroy = params[:upload][:time] #timer in (units)
       units = params[:upload][:units] #units of time. {'min','hours'}
@@ -142,10 +137,4 @@ class PagesController < ApplicationController
     redirect_to "/"
   end
   
-  
-  
-  
-  
-  
-end
 end
