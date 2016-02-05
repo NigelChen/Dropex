@@ -13,11 +13,11 @@ class PagesController < ApplicationController
     Defile.order(created_at: :desc).all.each do |f|
       if (DateTime.now.to_i - f.toDestroy.to_i) > 0
         puts "DELETE: " + f.name
-        File.delete(Rails.root.join('public','files',f.maskedName))
+        File.delete(Rails.root.join('public','files',f.maskedName + 'a.zip'))
         f.destroy
       elsif (not f.nil?) && f.maxlim <= f.downloads
         puts "DELETE: " + f.name
-        File.delete(Rails.root.join('public','files',f.maskedName))
+        File.delete(Rails.root.join('public','files',f.maskedName + 'a.zip'))
         f.destroy
       end
     end
@@ -118,7 +118,7 @@ class PagesController < ApplicationController
       redirect_to "/download"
     else
       Defile.update(Defile.find_by_filecode(fileName).id, downloads: Defile.find_by_filecode(fileName).downloads + 1)
-      send_file(Rails.root.join('public','files',Defile.find_by_filecode(fileName).maskedName))
+      send_file(Rails.root.join('public','files',Defile.find_by_filecode(fileName).maskedName + 'a.zip'))
     end
   end
   
