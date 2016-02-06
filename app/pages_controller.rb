@@ -1,9 +1,6 @@
-
-#init dependencies 
-require 'zip'
-#end dependencies
-
 class PagesController < ApplicationController
+  require 'zip'
+
   def index
     sweepFile
     
@@ -13,11 +10,11 @@ class PagesController < ApplicationController
     Defile.order(created_at: :desc).all.each do |f|
       if (DateTime.now.to_i - f.toDestroy.to_i) > 0
         puts "DELETE: " + f.name
-        File.delete(Rails.root.join('public','files',f.maskedName + 'a.zip'))
+        File.delete(Rails.root.join('public','files',f.maskedName))
         f.destroy
       elsif (not f.nil?) && f.maxlim <= f.downloads
         puts "DELETE: " + f.name
-        File.delete(Rails.root.join('public','files',f.maskedName + 'a.zip'))
+        File.delete(Rails.root.join('public','files',f.maskedName))
         f.destroy
       end
     end
@@ -35,6 +32,7 @@ class PagesController < ApplicationController
       flash[:notice] = "You need to complete the recaptcha."
       redirect_to "/"
     else
+
       fileObject = params[:upload][:file] #the file
       timeToDestroy = params[:upload][:time] #timer in (units)
       units = params[:upload][:units] #units of time. {'min','hours'}
@@ -92,13 +90,16 @@ class PagesController < ApplicationController
       
       #creates file object. save into databse
       Defile.create(name: fileObject.original_filename, maskedName: maskedFileName, toDestroy: hours, filecode: code,maxlim: maxlim,downloads:0)
-      binaryCode = fileObject.read
       
-      #saves the zip
-      Zip::File.open(Rails.root.join('public','files',maskedFileName + 'a.zip'), Zip::File::CREATE) do |zipfile|
-        zipfile.get_output_stream(fileObject.original_filename)  { |os| os.puts(binaryCode)}
+      #saves into the disk
+      File.open(Rails.root.join('public','files', maskedFileName), 'wb') do |f|
+        f.write(fileObject.read)
       end
-      
+      #saves the zip
+
+      Zip::File.open(Rails.root.join('public','files',maskedFileName + 'a.zip'), Zip::File::CREATE) do |zipfile|
+      zipfile.get_output_stream(fileObject.original_filename)  { |os| os.puts(fileObject.read)}
+      end
       flash[:success] = "Your file code is #{code} " 
       #yay, finished! redirect    
       redirect_to "/"
@@ -114,16 +115,7 @@ class PagesController < ApplicationController
       redirect_to "/download"
     else
       Defile.update(Defile.find_by_filecode(fileName).id, downloads: Defile.find_by_filecode(fileName).downloads + 1)
-      content = ""
-      Zip::File.open(Rails.root.join('public','files',Defile.find_by_filecode(fileName).maskedName + 'a.zip')) do |zip|
-        zip.each do |file|
-          puts "OMFG I READING IT::::::"
-          content = file.get_input_stream.read
-        end
-      end
-
-      send_data(content, filename: Defile.find_by_filecode(fileName).name)
-      
+      send_file(Rails.root.join('public','files',Defile.find_by_filecode(fileName).maskedName), :filename => Defile.find_by_filecode(fileName).name)
     end
   end
   
@@ -141,5 +133,10 @@ class PagesController < ApplicationController
     flash[:notice] = "Success. All configs are updated"
     redirect_to "/"
   end
+  
+  
+  
+  
+  
   
 end
