@@ -50,9 +50,9 @@ class PagesController < ApplicationController
       
       #check the length of the code. handles accordingly
       if code.length <= 0
-        code = SecureRandom.hex(3)
+        code = randomCode()
         while not Defile.find_by_filecode(code).nil?
-          maskedFileName = SecureRandom.hex
+          code = randomCode()
         end
       end
       
@@ -85,9 +85,9 @@ class PagesController < ApplicationController
       
       
       #creates the file name.
-      maskedFileName = SecureRandom.hex 
+      maskedFileName = SecureRandom.hex(3)
       while Defile.exists?(maskedFileName)
-        maskedFileName = SecureRandom.hex
+        maskedFileName = SecureRandom.hex(3)
       end
       
       #creates file object. save into databse
@@ -103,6 +103,23 @@ class PagesController < ApplicationController
       #yay, finished! redirect    
       redirect_to "/"
     end
+  end
+  
+  def randomCode
+    randomword = ""
+  
+    prng = Random.new
+    filenum = prng.rand(1..5) #choose which word file
+    prng2 = Random.new
+    wordnum = prng2.rand(1..278) - 1 #choose line number from word file
+       
+    #get the random word
+    File.open(Rails.root.join('public','words', filenum.to_s + '.txt'),'r') do |file|
+      wordnum.times { file.gets }
+      randomword = file.gets
+    end
+
+    return randomword.strip()
   end
   
   
